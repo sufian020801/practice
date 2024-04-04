@@ -6,6 +6,7 @@ pipeline {
             steps {
                 // Step to clone the repository
                 git 'https://github.com/sufian020801/practice.git'
+                echo 'Hello, World'
             }
         }
         stage('Install Dependencies') {
