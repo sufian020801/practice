@@ -5,8 +5,16 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Step to clone the repository
-                git 'https://github.com/sufian020801/practice.git'
-                echo 'Hello, World'
+                script {
+                    try {
+                        git 'https://github.com/sufian020801/practice.git'
+                        echo 'Repository cloned successfully'
+                    } catch (Exception e) {
+                        echo "Failed to clone repository: ${e.message}"
+                        currentBuild.result = 'FAILURE'
+                        error(e.message)
+                    }
+                }
             }
         }
         stage('Install Dependencies') {
