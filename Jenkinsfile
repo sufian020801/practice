@@ -7,7 +7,7 @@ pipeline {
                 // Step to clone the repository
                 script {
                     try {
-                        git 'https://github.com/sufian020801/practice.git'
+                        git 'https://github.com/sufian020801/practice'
                         echo 'Repository cloned successfully'
                     } catch (Exception e) {
                         echo "Failed to clone repository: ${e.message}"
