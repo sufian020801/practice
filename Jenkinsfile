@@ -4,42 +4,32 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                // Step to clone the repository
-                script {
-                    try {
-                        git 'https://github.com/sufian020801/practice'
-                        echo 'Repository cloned successfully'
-                    } catch (Exception e) {
-                        echo "Failed to clone repository: ${e.message}"
-                        currentBuild.result = 'FAILURE'
-                        error(e.message)
-                    }
-                }
+                git 'https://github.com/sufian020801/practice'
             }
         }
+        
         stage('Install Dependencies') {
             steps {
-                // Step to install dependencies using pip
                 sh 'pip install -r requirements.txt'
             }
         }
-        stage('Run Tests') {
+
+        stage('Execute Tests') {
             steps {
-                // Step to execute test.py
                 sh 'python test.py'
             }
         }
+
         stage('Deploy') {
             steps {
                 script {
-                    // Step to deploy based on branch name
                     def branchName = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
                     if (branchName == 'dev') {
                         echo 'Deploying to production'
-                        // Add deployment commands for production
+                        // Add your deployment steps for production
                     } else {
                         echo 'Deploying to UAT'
-                        // Add deployment commands for UAT
+                        // Add your deployment steps for UAT
                     }
                 }
             }
