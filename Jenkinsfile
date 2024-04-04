@@ -34,7 +34,7 @@ pipeline {
                 script {
                     // Step to deploy based on branch name
                     def branchName = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
-                    if (branchName == 'main') {
+                    if (branchName == 'dev') {
                         echo 'Deploying to production'
                         // Add deployment commands for production
                     } else {
