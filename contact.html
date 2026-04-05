@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .form-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      padding: 40px;
+      max-width: 640px;
+      width: 100%;
+    }
+
+    .form-container h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 28px;
+    }
+
+    .form-container p.subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .form-group label .required {
+      color: #e74c3c;
+      margin-left: 2px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fafafa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+      background: #fff;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-group .char-count {
+      text-align: right;
+      font-size: 12px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .btn-submit {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      margin-top: 10px;
+    }
+
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:active { transform: scale(0.98); }
+
+    .hidden { display: none; }
+
+    @media (max-width: 500px) {
+      .form-row { flex-direction: column; gap: 0; }
+      .form-container { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Contact Us</h1>
+    <p class="subtitle">We'd love to hear from you. Fill out the form below and we'll get back to you shortly.</p>
+
+    <form id="contactForm">
+      <!-- Name -->
+      <div class="form-group">
+        <label>Name <span class="required">*</span></label>
+        <input type="text" id="name" name="name" placeholder="Your full name" required>
+      </div>
+
+      <!-- Business Email -->
+      <div class="form-group">
+        <label>Business Email <span class="required">*</span></label>
+        <input type="email" id="email" name="email" placeholder="you@company.com" required>
+      </div>
+
+      <!-- Business Contact Phone -->
+      <div class="form-group">
+        <label>Business Contact Phone # <span class="required">*</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" required>
+      </div>
+
+      <!-- Business Type -->
+      <div class="form-group">
+        <label>Business Type <span class="required">*</span></label>
+        <input type="text" id="businessType" name="businessType" placeholder="e.g. Technology, Healthcare, Retail" required>
+      </div>
+
+      <!-- Services -->
+      <div class="form-group">
+        <label>Services <span class="required">*</span></label>
+        <select id="services" name="services" required>
+          <option value="" disabled selected>Select a service</option>
+          <option value="QaaS">QaaS</option>
+          <option value="Digital Marketing">Digital Marketing</option>
+          <option value="SEO Optimization 4 Months Plan">SEO Optimization 4 Months Plan</option>
+          <option value="Customized Services">Customized Services</option>
+        </select>
+      </div>
+
+      <!-- Customized Services Input (conditionally visible) -->
+      <div class="form-group hidden" id="customServiceGroup">
+        <label>Describe Your Customized Service <span class="required">*</span></label>
+        <input type="text" id="customService" name="customService" maxlength="200" placeholder="Describe the service you need (max 200 characters)">
+        <div class="char-count"><span id="customServiceCount">0</span> / 200</div>
+      </div>
+
+      <!-- Country -->
+      <div class="form-group">
+        <label>Country <span class="required">*</span></label>
+        <select id="country" name="country" required>
+          <option value="" disabled selected>Select your country</option>
+        </select>
+      </div>
+
+      <!-- State & Zip -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>State <span class="required">*</span></label>
+          <select id="state" name="state" required disabled>
+            <option value="" disabled selected>Select a state</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Zip Code</label>
+          <input type="text" id="zipCode" name="zipCode" placeholder="Auto-populated" readonly>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="description" name="description" maxlength="500" placeholder="Tell us more about your requirements (max 500 characters)"></textarea>
+        <div class="char-count"><span id="descriptionCount">0</span> / 500</div>
+      </div>
+
+      <button type="submit" class="btn-submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    // ── Country → States → Zip data ──
+    const locationData = {
+      "USA": {
+        "Alabama": ["35801", "36101", "36602"],
+        "Alaska": ["99501", "99701", "99801"],
+        "Arizona": ["85001", "85201", "86001"],
+        "Arkansas": ["72201", "72701", "71601"],
+        "California": ["90001", "94102", "92101"],
+        "Colorado": ["80201", "80301", "80901"],
+        "Connecticut": ["06101", "06501", "06801"],
+        "Delaware": ["19901", "19801", "19701"],
+        "Florida": ["33101", "32301", "32801"],
+        "Georgia": ["30301", "31401", "30901"],
+        "Hawaii": ["96801", "96720", "96732"],
+        "Idaho": ["83701", "83201", "83301"],
+        "Illinois": ["60601", "62701", "61601"],
+        "Indiana": ["46201", "47901", "46801"],
+        "Iowa": ["50301", "52401", "52801"],
+        "Kansas": ["66101", "67201", "66601"],
+        "Kentucky": ["40201", "40501", "42101"],
+        "Louisiana": ["70112", "70801", "71101"],
+        "Maine": ["04101", "04401", "04330"],
+        "Maryland": ["21201", "20901", "21401"],
+        "Massachusetts": ["02101", "01601", "01101"],
+        "Michigan": ["48201", "49501", "48601"],
+        "Minnesota": ["55101", "55401", "56001"],
+        "Mississippi": ["39201", "39501", "38601"],
+        "Missouri": ["63101", "64101", "65101"],
+        "Montana": ["59601", "59101", "59401"],
+        "Nebraska": ["68501", "68101", "68801"],
+        "Nevada": ["89101", "89501", "89701"],
+        "New Hampshire": ["03301", "03101", "03801"],
+        "New Jersey": ["07101", "08601", "07901"],
+        "New Mexico": ["87101", "88001", "87501"],
+        "New York": ["10001", "12201", "14201"],
+        "North Carolina": ["27601", "28201", "27101"],
+        "North Dakota": ["58501", "58101", "58201"],
+        "Ohio": ["43201", "44101", "45201"],
+        "Oklahoma": ["73101", "74101", "73401"],
+        "Oregon": ["97201", "97401", "97301"],
+        "Pennsylvania": ["17101", "19101", "15201"],
+        "Rhode Island": ["02901", "02860", "02840"],
+        "South Carolina": ["29201", "29401", "29601"],
+        "South Dakota": ["57501", "57101", "57701"],
+        "Tennessee": ["37201", "38101", "37901"],
+        "Texas": ["73301", "77001", "75201"],
+        "Utah": ["84101", "84601", "84321"],
+        "Vermont": ["05601", "05401", "05701"],
+        "Virginia": ["23218", "23501", "24011"],
+        "Washington": ["98101", "99201", "98401"],
+        "West Virginia": ["25301", "26501", "25701"],
+        "Wisconsin": ["53201", "54301", "53701"],
+        "Wyoming": ["82001", "82601", "82401"]
+      },
+      "UK": {
+        "England": ["SW1A 1AA", "M1 1AA", "B1 1AA"],
+        "Scotland": ["EH1 1AA", "G1 1AA", "AB10 1AA"],
+        "Wales": ["CF10 1AA", "SA1 1AA", "LL57 1AA"],
+        "Northern Ireland": ["BT1 1AA", "BT48 6AA", "BT35 6AA"]
+      },
+      "Australia": {
+        "New South Wales": ["2000", "2150", "2500"],
+        "Victoria": ["3000", "3128", "3220"],
+        "Queensland": ["4000", "4101", "4350"],
+        "South Australia": ["5000", "5042", "5290"],
+        "Western Australia": ["6000", "6100", "6230"],
+        "Tasmania": ["7000", "7250", "7300"],
+        "Northern Territory": ["0800", "0810", "0850"],
+        "ACT": ["2600", "2601", "2615"]
+      },
+      "UAE": {
+        "Abu Dhabi": ["00000"],
+        "Dubai": ["00000"],
+        "Sharjah": ["00000"],
+        "Ajman": ["00000"],
+        "Umm Al Quwain": ["00000"],
+        "Ras Al Khaimah": ["00000"],
+        "Fujairah": ["00000"]
+      },
+      "Canada": {
+        "Alberta": ["T2P 0A1", "T5J 0A1", "T1Y 0A1"],
+        "British Columbia": ["V6B 0A1", "V8W 0A1", "V1Y 0A1"],
+        "Manitoba": ["R3C 0A1", "R2C 0A1", "R7A 0A1"],
+        "New Brunswick": ["E1C 0A1", "E2L 0A1", "E3B 0A1"],
+        "Newfoundland and Labrador": ["A1C 0A1", "A2N 0A1", "A8A 0A1"],
+        "Nova Scotia": ["B3H 0A1", "B2A 0A1", "B4A 0A1"],
+        "Ontario": ["M5V 0A1", "K1A 0A1", "N6A 0A1"],
+        "Prince Edward Island": ["C1A 0A1", "C0A 0A1", "C0B 0A1"],
+        "Quebec": ["H2X 0A1", "G1R 0A1", "J1H 0A1"],
+        "Saskatchewan": ["S4P 0A1", "S7K 0A1", "S6H 0A1"]
+      },
+      "India": {
+        "Andhra Pradesh": ["500001", "530001", "520001"],
+        "Delhi": ["110001", "110021", "110051"],
+        "Gujarat": ["380001", "395001", "360001"],
+        "Karnataka": ["560001", "570001", "580001"],
+        "Maharashtra": ["400001", "411001", "440001"],
+        "Tamil Nadu": ["600001", "641001", "625001"],
+        "Telangana": ["500001", "506001", "502001"],
+        "Uttar Pradesh": ["226001", "211001", "282001"],
+        "West Bengal": ["700001", "713101", "721101"]
+      },
+      "Germany": {
+        "Bavaria": ["80331", "90402", "86150"],
+        "Berlin": ["10115", "10178", "10435"],
+        "Hamburg": ["20095", "20144", "22041"],
+        "Hesse": ["60311", "65183", "34117"],
+        "Lower Saxony": ["30159", "38100", "49074"],
+        "North Rhine-Westphalia": ["40210", "50667", "44135"],
+        "Saxony": ["01067", "04109", "09111"]
+      },
+      "Singapore": {
+        "Central Region": ["018956", "179098", "238823"],
+        "East Region": ["486048", "489318", "529510"],
+        "North Region": ["730001", "760001", "750001"],
+        "North-East Region": ["530001", "540001", "545001"],
+        "West Region": ["600001", "640001", "648886"]
+      },
+      "Pakistan": {
+        "Punjab": ["54000", "38000", "60000"],
+        "Sindh": ["74000", "71000", "76000"],
+        "Khyber Pakhtunkhwa": ["25000", "24100", "27200"],
+        "Balochistan": ["87300", "80200", "82000"],
+        "Islamabad": ["44000", "45000", "46000"]
+      }
+    };
+
+    // ── Populate country dropdown ──
+    const countrySelect = document.getElementById('country');
+    const stateSelect = document.getElementById('state');
+    const zipInput = document.getElementById('zipCode');
+
+    Object.keys(locationData).forEach(country => {
+      const opt = document.createElement('option');
+      opt.value = country;
+      opt.textContent = country;
+      countrySelect.appendChild(opt);
+    });
+
+    // ── Country change → populate states ──
+    countrySelect.addEventListener('change', function () {
+      const states = locationData[this.value];
+      stateSelect.innerHTML = '<option value="" disabled selected>Select a state</option>';
+      zipInput.value = '';
+
+      if (states) {
+        Object.keys(states).forEach(state => {
+          const opt = document.createElement('option');
+          opt.value = state;
+          opt.textContent = state;
+          stateSelect.appendChild(opt);
+        });
+        stateSelect.disabled = false;
+      } else {
+        stateSelect.disabled = true;
+      }
+    });
+
+    // ── State change → auto-populate zip ──
+    stateSelect.addEventListener('change', function () {
+      const country = countrySelect.value;
+      const state = this.value;
+      if (locationData[country] && locationData[country][state]) {
+        zipInput.value = locationData[country][state][0];
+      }
+    });
+
+    // ── Services → show/hide custom input ──
+    const servicesSelect = document.getElementById('services');
+    const customGroup = document.getElementById('customServiceGroup');
+    const customInput = document.getElementById('customService');
+
+    servicesSelect.addEventListener('change', function () {
+      if (this.value === 'Customized Services') {
+        customGroup.classList.remove('hidden');
+        customInput.required = true;
+      } else {
+        customGroup.classList.add('hidden');
+        customInput.required = false;
+        customInput.value = '';
+        document.getElementById('customServiceCount').textContent = '0';
+      }
+    });
+
+    // ── Character counters ──
+    customInput.addEventListener('input', function () {
+      document.getElementById('customServiceCount').textContent = this.value.length;
+    });
+
+    document.getElementById('description').addEventListener('input', function () {
+      document.getElementById('descriptionCount').textContent = this.value.length;
+    });
+
+    // ── Form submit ──
+    document.getElementById('contactForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      console.log('Form submitted:', data);
+      alert('Thank you for contacting us! We will get back to you shortly.');
+      this.reset();
+      customGroup.classList.add('hidden');
+      stateSelect.innerHTML = '<option value="" disabled selected>Select a state</option>';
+      stateSelect.disabled = true;
+      zipInput.value = '';
+      document.getElementById('customServiceCount').textContent = '0';
+      document.getElementById('descriptionCount').textContent = '0';
+    });
+  </script>
+</body>
+</html>
