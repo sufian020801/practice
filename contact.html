@@ -22,26 +22,58 @@
       border-radius: 16px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
       padding: 40px;
-      max-width: 640px;
+      max-width: 680px;
       width: 100%;
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .form-container h1 {
       text-align: center;
       color: #333;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-size: 28px;
     }
 
     .form-container p.subtitle {
       text-align: center;
       color: #777;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       font-size: 14px;
     }
 
+    /* ── Progress Bar ── */
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #eee;
+      border-radius: 3px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    .progress-bar .fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+    .progress-text {
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 20px;
+      margin-top: -22px;
+    }
+
+    /* ── Form Fields ── */
     .form-group {
       margin-bottom: 20px;
+      position: relative;
     }
 
     .form-group label {
@@ -52,22 +84,21 @@
       font-size: 14px;
     }
 
-    .form-group label .required {
-      color: #e74c3c;
-      margin-left: 2px;
-    }
+    .form-group label .required { color: #e74c3c; margin-left: 2px; }
+    .form-group label .optional { color: #aaa; font-weight: 400; font-size: 12px; margin-left: 4px; }
 
     .form-group input,
     .form-group select,
     .form-group textarea {
       width: 100%;
-      padding: 10px 14px;
+      padding: 11px 14px;
       border: 1.5px solid #ddd;
       border-radius: 8px;
       font-size: 14px;
       font-family: inherit;
       transition: border-color 0.2s, box-shadow 0.2s;
       background: #fafafa;
+      color: #333;
     }
 
     .form-group input:focus,
@@ -77,6 +108,18 @@
       border-color: #667eea;
       box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
       background: #fff;
+    }
+
+    .form-group input.valid { border-color: #27ae60; }
+    .form-group input.invalid,
+    .form-group select.invalid,
+    .form-group textarea.invalid { border-color: #e74c3c; }
+
+    .form-group .error-msg {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 4px;
+      min-height: 16px;
     }
 
     .form-group textarea {
@@ -90,18 +133,41 @@
       color: #999;
       margin-top: 4px;
     }
+    .form-group .char-count.warning { color: #e67e22; }
+    .form-group .char-count.limit { color: #e74c3c; font-weight: 600; }
+
+    .form-group .input-icon {
+      position: absolute;
+      right: 12px;
+      top: 38px;
+      font-size: 14px;
+      pointer-events: none;
+    }
 
     .form-row {
       display: flex;
       gap: 16px;
     }
+    .form-row .form-group { flex: 1; }
 
-    .form-row .form-group {
-      flex: 1;
+    /* ── Slide animation for conditional fields ── */
+    .slide-group {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    .slide-group.open {
+      max-height: 200px;
+      opacity: 1;
     }
 
+    /* ── Submit Button ── */
     .btn-submit {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       width: 100%;
       padding: 14px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -114,13 +180,69 @@
       transition: opacity 0.2s, transform 0.1s;
       margin-top: 10px;
     }
-
     .btn-submit:hover { opacity: 0.9; }
     .btn-submit:active { transform: scale(0.98); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-submit .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .hidden { display: none; }
+    /* ── Success Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      max-width: 420px;
+      width: 90%;
+      animation: fadeInUp 0.4s ease-out;
+    }
+    .modal-box .checkmark {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      animation: popIn 0.4s ease-out;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    .modal-box .checkmark svg { width: 32px; height: 32px; stroke: #fff; }
+    .modal-box h2 { color: #333; margin-bottom: 8px; }
+    .modal-box p { color: #777; font-size: 14px; margin-bottom: 20px; }
+    .modal-box button {
+      padding: 10px 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
-    @media (max-width: 500px) {
+    @media (max-width: 540px) {
       .form-row { flex-direction: column; gap: 0; }
       .form-container { padding: 24px; }
     }
@@ -131,29 +253,54 @@
     <h1>Contact Us</h1>
     <p class="subtitle">We'd love to hear from you. Fill out the form below and we'll get back to you shortly.</p>
 
-    <form id="contactForm">
+    <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+
+    <form id="contactForm" novalidate>
       <!-- Name -->
       <div class="form-group">
         <label>Name <span class="required">*</span></label>
         <input type="text" id="name" name="name" placeholder="Your full name" required>
+        <span class="input-icon" id="nameIcon"></span>
+        <div class="error-msg" id="nameError"></div>
       </div>
 
       <!-- Business Email -->
       <div class="form-group">
         <label>Business Email <span class="required">*</span></label>
         <input type="email" id="email" name="email" placeholder="you@company.com" required>
+        <span class="input-icon" id="emailIcon"></span>
+        <div class="error-msg" id="emailError"></div>
       </div>
 
       <!-- Business Contact Phone -->
       <div class="form-group">
         <label>Business Contact Phone # <span class="required">*</span></label>
         <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" required>
+        <span class="input-icon" id="phoneIcon"></span>
+        <div class="error-msg" id="phoneError"></div>
       </div>
 
       <!-- Business Type -->
       <div class="form-group">
         <label>Business Type <span class="required">*</span></label>
         <input type="text" id="businessType" name="businessType" placeholder="e.g. Technology, Healthcare, Retail" required>
+        <div class="error-msg" id="businessTypeError"></div>
+      </div>
+
+      <!-- Business URL (optional) -->
+      <div class="form-group">
+        <label>Business Website URL <span class="optional">(optional)</span></label>
+        <input type="url" id="businessUrl" name="businessUrl" placeholder="https://www.yourcompany.com">
+        <span class="input-icon" id="businessUrlIcon"></span>
+        <div class="error-msg" id="businessUrlError"></div>
+      </div>
+
+      <!-- LinkedIn URL (optional) -->
+      <div class="form-group">
+        <label>LinkedIn URL <span class="optional">(optional)</span></label>
+        <input type="url" id="linkedinUrl" name="linkedinUrl" placeholder="https://www.linkedin.com/in/yourprofile">
+        <span class="input-icon" id="linkedinUrlIcon"></span>
+        <div class="error-msg" id="linkedinUrlError"></div>
       </div>
 
       <!-- Services -->
@@ -166,13 +313,16 @@
           <option value="SEO Optimization 4 Months Plan">SEO Optimization 4 Months Plan</option>
           <option value="Customized Services">Customized Services</option>
         </select>
+        <div class="error-msg" id="servicesError"></div>
       </div>
 
-      <!-- Customized Services Input (conditionally visible) -->
-      <div class="form-group hidden" id="customServiceGroup">
-        <label>Describe Your Customized Service <span class="required">*</span></label>
-        <input type="text" id="customService" name="customService" maxlength="200" placeholder="Describe the service you need (max 200 characters)">
-        <div class="char-count"><span id="customServiceCount">0</span> / 200</div>
+      <!-- Customized Services Input (slide open) -->
+      <div class="slide-group" id="customServiceGroup">
+        <div class="form-group">
+          <label>Describe Your Customized Service <span class="required">*</span></label>
+          <input type="text" id="customService" name="customService" maxlength="200" placeholder="Describe the service you need (max 200 characters)">
+          <div class="char-count"><span id="customServiceCount">0</span> / 200</div>
+        </div>
       </div>
 
       <!-- Country -->
@@ -181,6 +331,7 @@
         <select id="country" name="country" required>
           <option value="" disabled selected>Select your country</option>
         </select>
+        <div class="error-msg" id="countryError"></div>
       </div>
 
       <!-- State & Zip -->
@@ -190,6 +341,7 @@
           <select id="state" name="state" required disabled>
             <option value="" disabled selected>Select a state</option>
           </select>
+          <div class="error-msg" id="stateError"></div>
         </div>
         <div class="form-group">
           <label>Zip Code</label>
@@ -199,13 +351,30 @@
 
       <!-- Description -->
       <div class="form-group">
-        <label>Description</label>
+        <label>Description <span class="optional">(optional)</span></label>
         <textarea id="description" name="description" maxlength="500" placeholder="Tell us more about your requirements (max 500 characters)"></textarea>
         <div class="char-count"><span id="descriptionCount">0</span> / 500</div>
       </div>
 
-      <button type="submit" class="btn-submit">Submit</button>
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <span class="spinner" id="spinner"></span>
+        <span id="submitText">Submit</span>
+      </button>
     </form>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-box">
+      <div class="checkmark">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h2>Thank You!</h2>
+      <p>Your message has been submitted successfully. We'll get back to you within 24 hours.</p>
+      <button onclick="closeModal()">Close</button>
+    </div>
   </div>
 
   <script>
@@ -336,11 +505,17 @@
       }
     };
 
-    // ── Populate country dropdown ──
+    // ── Elements ──
     const countrySelect = document.getElementById('country');
     const stateSelect = document.getElementById('state');
     const zipInput = document.getElementById('zipCode');
+    const servicesSelect = document.getElementById('services');
+    const customGroup = document.getElementById('customServiceGroup');
+    const customInput = document.getElementById('customService');
+    const form = document.getElementById('contactForm');
+    const progressFill = document.getElementById('progressFill');
 
+    // ── Populate country dropdown ──
     Object.keys(locationData).forEach(country => {
       const opt = document.createElement('option');
       opt.value = country;
@@ -348,75 +523,248 @@
       countrySelect.appendChild(opt);
     });
 
-    // ── Country change → populate states ──
+    // ── Country → States ──
     countrySelect.addEventListener('change', function () {
       const states = locationData[this.value];
       stateSelect.innerHTML = '<option value="" disabled selected>Select a state</option>';
       zipInput.value = '';
-
       if (states) {
-        Object.keys(states).forEach(state => {
+        Object.keys(states).forEach(s => {
           const opt = document.createElement('option');
-          opt.value = state;
-          opt.textContent = state;
+          opt.value = s;
+          opt.textContent = s;
           stateSelect.appendChild(opt);
         });
         stateSelect.disabled = false;
       } else {
         stateSelect.disabled = true;
       }
+      updateProgress();
     });
 
-    // ── State change → auto-populate zip ──
+    // ── State → Zip ──
     stateSelect.addEventListener('change', function () {
       const country = countrySelect.value;
       const state = this.value;
       if (locationData[country] && locationData[country][state]) {
         zipInput.value = locationData[country][state][0];
       }
+      updateProgress();
     });
 
-    // ── Services → show/hide custom input ──
-    const servicesSelect = document.getElementById('services');
-    const customGroup = document.getElementById('customServiceGroup');
-    const customInput = document.getElementById('customService');
-
+    // ── Services toggle ──
     servicesSelect.addEventListener('change', function () {
       if (this.value === 'Customized Services') {
-        customGroup.classList.remove('hidden');
+        customGroup.classList.add('open');
         customInput.required = true;
       } else {
-        customGroup.classList.add('hidden');
+        customGroup.classList.remove('open');
         customInput.required = false;
         customInput.value = '';
         document.getElementById('customServiceCount').textContent = '0';
       }
+      updateProgress();
     });
 
     // ── Character counters ──
     customInput.addEventListener('input', function () {
-      document.getElementById('customServiceCount').textContent = this.value.length;
+      const len = this.value.length;
+      const el = document.getElementById('customServiceCount');
+      el.textContent = len;
+      el.parentElement.className = 'char-count' + (len >= 200 ? ' limit' : len >= 170 ? ' warning' : '');
+      updateProgress();
     });
 
     document.getElementById('description').addEventListener('input', function () {
-      document.getElementById('descriptionCount').textContent = this.value.length;
+      const len = this.value.length;
+      const el = document.getElementById('descriptionCount');
+      el.textContent = len;
+      el.parentElement.className = 'char-count' + (len >= 500 ? ' limit' : len >= 420 ? ' warning' : '');
+      updateProgress();
     });
 
-    // ── Form submit ──
-    document.getElementById('contactForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-      console.log('Form submitted:', data);
-      alert('Thank you for contacting us! We will get back to you shortly.');
-      this.reset();
-      customGroup.classList.add('hidden');
-      stateSelect.innerHTML = '<option value="" disabled selected>Select a state</option>';
-      stateSelect.disabled = true;
-      zipInput.value = '';
-      document.getElementById('customServiceCount').textContent = '0';
-      document.getElementById('descriptionCount').textContent = '0';
+    // ── Real-time field validation ──
+    const validators = {
+      name: {
+        validate: v => v.trim().length >= 2,
+        msg: 'Name must be at least 2 characters'
+      },
+      email: {
+        validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+        msg: 'Please enter a valid email address'
+      },
+      phone: {
+        validate: v => /^[+]?[\d\s().-]{7,20}$/.test(v),
+        msg: 'Please enter a valid phone number'
+      },
+      businessType: {
+        validate: v => v.trim().length >= 2,
+        msg: 'Please enter your business type'
+      },
+      businessUrl: {
+        validate: v => v === '' || /^https?:\/\/.+\..+/.test(v),
+        msg: 'Please enter a valid URL (e.g. https://example.com)'
+      },
+      linkedinUrl: {
+        validate: v => v === '' || /^https?:\/\/(www\.)?linkedin\.com\/.+/.test(v),
+        msg: 'Please enter a valid LinkedIn URL'
+      }
+    };
+
+    Object.keys(validators).forEach(id => {
+      const input = document.getElementById(id);
+      input.addEventListener('blur', () => validateField(id));
+      input.addEventListener('input', () => {
+        if (input.classList.contains('invalid') || input.classList.contains('valid')) {
+          validateField(id);
+        }
+        updateProgress();
+      });
     });
+
+    function validateField(id) {
+      const input = document.getElementById(id);
+      const errorEl = document.getElementById(id + 'Error');
+      const iconEl = document.getElementById(id + 'Icon');
+      const v = validators[id];
+      const val = input.value;
+
+      if (val === '' && !input.required) {
+        input.classList.remove('valid', 'invalid');
+        if (errorEl) errorEl.textContent = '';
+        if (iconEl) iconEl.textContent = '';
+        return true;
+      }
+
+      if (val === '' && input.required) {
+        input.classList.remove('valid');
+        input.classList.add('invalid');
+        if (errorEl) errorEl.textContent = 'This field is required';
+        if (iconEl) iconEl.textContent = '';
+        return false;
+      }
+
+      if (v.validate(val)) {
+        input.classList.remove('invalid');
+        input.classList.add('valid');
+        if (errorEl) errorEl.textContent = '';
+        if (iconEl) iconEl.textContent = '\u2713';
+        return true;
+      } else {
+        input.classList.remove('valid');
+        input.classList.add('invalid');
+        if (errorEl) errorEl.textContent = v.msg;
+        if (iconEl) iconEl.textContent = '';
+        return false;
+      }
+    }
+
+    // ── Progress bar ──
+    function updateProgress() {
+      const requiredFields = ['name', 'email', 'phone', 'businessType'];
+      const requiredSelects = ['services', 'country', 'state'];
+      let filled = 0;
+      let total = requiredFields.length + requiredSelects.length;
+
+      if (servicesSelect.value === 'Customized Services') {
+        total++;
+        if (customInput.value.trim()) filled++;
+      }
+
+      requiredFields.forEach(id => {
+        if (document.getElementById(id).value.trim()) filled++;
+      });
+      requiredSelects.forEach(id => {
+        if (document.getElementById(id).value) filled++;
+      });
+
+      // optional fields add bonus
+      if (document.getElementById('businessUrl').value.trim()) filled += 0.3;
+      if (document.getElementById('linkedinUrl').value.trim()) filled += 0.3;
+      if (document.getElementById('description').value.trim()) filled += 0.4;
+
+      const pct = Math.min(100, Math.round((filled / total) * 100));
+      progressFill.style.width = pct + '%';
+    }
+
+    // Listen for changes on selects for progress
+    ['services', 'country', 'state'].forEach(id => {
+      document.getElementById(id).addEventListener('change', updateProgress);
+    });
+
+    // ── Form submission ──
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Validate all required fields
+      let valid = true;
+      Object.keys(validators).forEach(id => {
+        if (!validateField(id)) valid = false;
+      });
+
+      // Validate selects
+      ['services', 'country', 'state'].forEach(id => {
+        const el = document.getElementById(id);
+        const errEl = document.getElementById(id + 'Error');
+        if (!el.value || el.value === '') {
+          el.classList.add('invalid');
+          if (errEl) errEl.textContent = 'Please make a selection';
+          valid = false;
+        } else {
+          el.classList.remove('invalid');
+          if (errEl) errEl.textContent = '';
+        }
+      });
+
+      // Validate custom service if visible
+      if (servicesSelect.value === 'Customized Services' && !customInput.value.trim()) {
+        valid = false;
+        customInput.classList.add('invalid');
+      }
+
+      if (!valid) return;
+
+      // Show loading
+      const btn = document.getElementById('submitBtn');
+      const spinner = document.getElementById('spinner');
+      const submitText = document.getElementById('submitText');
+      btn.disabled = true;
+      spinner.style.display = 'block';
+      submitText.textContent = 'Submitting...';
+
+      // Simulate submission delay
+      setTimeout(() => {
+        btn.disabled = false;
+        spinner.style.display = 'none';
+        submitText.textContent = 'Submit';
+
+        // Log data
+        const formData = new FormData(form);
+        console.log('Form submitted:', Object.fromEntries(formData.entries()));
+
+        // Show success modal
+        document.getElementById('successModal').classList.add('show');
+
+        // Reset form
+        form.reset();
+        customGroup.classList.remove('open');
+        stateSelect.innerHTML = '<option value="" disabled selected>Select a state</option>';
+        stateSelect.disabled = true;
+        zipInput.value = '';
+        document.getElementById('customServiceCount').textContent = '0';
+        document.getElementById('descriptionCount').textContent = '0';
+        progressFill.style.width = '0%';
+
+        // Clear all validation states
+        form.querySelectorAll('.valid, .invalid').forEach(el => el.classList.remove('valid', 'invalid'));
+        form.querySelectorAll('.error-msg').forEach(el => el.textContent = '');
+        form.querySelectorAll('.input-icon').forEach(el => el.textContent = '');
+      }, 1500);
+    });
+
+    function closeModal() {
+      document.getElementById('successModal').classList.remove('show');
+    }
   </script>
 </body>
 </html>
